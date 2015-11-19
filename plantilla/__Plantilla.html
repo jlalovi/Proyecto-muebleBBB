@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="ISO-8859-1">
+		<title>MueblesBBB</title>
+		<link rel="stylesheet" type="text/css" href="../css/estilos.css">
+		<script type="text/javascript" src="../js/libreria.js"></script>
+	</head>
+	<body>
+	
+		<header>
+			<div class="left logo">
+				<a href="inicio.php"><img alt="logotipo MuebleBBB S.L" src="../imagenes/LogoMuebleBBB.png"></a>
+			</div>
+			<div class="right cabecera_secundaria">
+				<div class="social right">
+					<a class="icon facebook" href="#"><span class="fontawesome-facebook-sign"></span></a>
+					<a class="icon twitter" href="#"><span class="fontawesome-twitter-sign"></span></a>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</header>
+		
+		<nav class="nav">
+			<a id="desplegable" href="#"><span class="fontawesome-reorder "></span></a>
+			<ul id="menu" class="menu_invisible">
+				<li><a href='inicio.php'>Inicio</a></li>
+				<li><a href='dormitorio.php'>Dormitorio</a></li>
+				<li><a href='salon.php'>Salón</a></li>
+				<li><a href='cocina.php'>Cocina</a></li>
+				<li><a href='banyo.php'>Baño</a></li>
+				<li><a href='exterior.php'>Exterior</a></li>
+				<li><a href='quienes_somos.php'>Quiénes somos</a></li>
+				<li><a href='contacto.php'>Contacto</a></li>
+			</ul>
+			<form class="buscador right" action="resultados_busqueda.php" method="post">
+				<input class="texto_busqueda" type="text" id="busca" name="busca" value="" size="20"/>
+				<input class="invisible" type="submit" value="enviar">
+				<span class="lupa fontawesome-search"></span>
+			</form>
+			<div class="clear"></div>
+		</nav>
+		
+		<div id="cuerpo">
+			{{body}}
+		</div>
+		<div class="clear"></div>
+		
+		<footer>
+			<p class="left elementos_pie">Copyright © MuebleBBB S.L. Desarrollado por <a href="http://codepen.io/jlalovi/" target="_blank">jlalovi</a></p>
+			<p class="right elementos_pie"><a href="mapa_sitio.php">Mapa del sitio</a></p>
+			<p class="right elementos_pie"><a href="aviso_legal.php">Aviso legal</a>, <a href="politica_privacidad.php">Política de privacidad</a> y de <a href="cookies.php">Cookies</a></p>
+		</footer>
+	</body>
+</html>
