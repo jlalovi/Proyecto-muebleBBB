@@ -3,42 +3,36 @@
 class CatalogoProductos {
 	
 	// DECLARACIÓN VARIABLES.
-	private $dormitorio;
-	private $salon;
-	private $cocina;
-	private $baño;
-	private $exterior;
-	private $todo;
+	/**
+	 * @var matrix -> catalogo["categoría"]["cod_producto"][Producto]
+	 */
+	private $catalogo;
+	/**
+	 * @var number -> Indica el número de categorías + productos en el catálogo. Esto me será útil en el tamaño del selector.
+	 */
+	private $size;
 	
 	//CONSTRUCTOR
 	/**
-	 * El catálogo de productos almacenará los productos en arrays en función de su categoría.
-	 * Dicho catálogo empezará con cada una de sus categorías (arrays), vacías.
+	 * El catálogo de productos almacenará los productos en arrays en función de su categoría y de su código.
+	 * El catálogo se iniciliciará como un vector vacío, pero al introducir nuevos productos será una matrziz
+	 * con el siguiente formato: 'catalogo["categoría"]["cod_producto"][Producto]'
 	 * El obejto 'CatalogoProductos' podrá llamar a métodos que permitan ver sus productos
 	 * almacenar nuevos, eliminar y modificar.
 	 */
 	public function CatalogoProductos() {
-		$this->__set("dormitorio", []);
-		$this->__set("salon", []);
-		$this->__set("cocina", []);
-		$this->__set("baño", []);
-		$this->__set("exterior", []);
-		$this->__set("todo", []);
+		$this->catalogo=array(); // Se inicializa como vector normal
+		$this->size=0; // Inicializo el tamaño de '$size' a 0
 	}
 	
 	// MÉTODOS
 	
 	//Setters y getters
-	public function __get($propiedad) {
-		if (property_exists($this, $propiedad)) {
-			return $this->$propiedad;
-		}
+	public function getProductos() {
+		return $this->catalogo;
 	}
-	public function __set($propiedad, $valor) {
-		if (property_exists($this, $propiedad)) {
-			$this->$propiedad = $valor;
-		}
-		return $this;
+	public function getSize() {
+		return $this->size;
 	}
 	
 	//métodos
@@ -69,10 +63,14 @@ class CatalogoProductos {
 	 */
 	public function ExisteCod($CodProducto) {
 		$existe=false;
-		foreach ($this->todo as $p) {
-			if ($p->__get("codigo")==$CodProducto) {
-				$existe=true;
-				break;
+		foreach ($this->catalogo as $categoria=>$valor) {
+			foreach ($valor as $producto) {
+				if (!empty($producto)) {
+					if ($producto->__get("codigo")==$CodProducto) {
+						$existe=true;
+						break;
+					}
+				}
 			}
 		}
 		return $existe;
@@ -84,9 +82,9 @@ class CatalogoProductos {
 	 * @return true: El producto existe en el catálogo - false: El producto no existe en el catálogo
 	 */
 	public function Existe($producto) {
-		if ($this->esProducto($producto)) {
+		if ($this->EsProducto($producto)) {
 			$id_producto = $producto->__get("codigo");
-			return $this->existeCod($id_producto);
+			return $this->ExisteCod($id_producto);
 		}
 		else
 			return false;
@@ -99,10 +97,12 @@ class CatalogoProductos {
 	 */
 	public function Buscar($CodProducto) {
 		$existe=false;
-		foreach ($this->todo as $p) {
-			if ($p->__get("codigo")==$CodProducto) {
-				$existe=true;
-				return $p;
+		foreach ($this->catalogo as $categoria=>$valor) {
+			foreach ($valor as $producto) {
+				if ($producto->__get("codigo")==$CodProducto) {
+					$existe=true;
+					return $producto;
+				}
 			}
 		}
 		if (!$existe)
@@ -110,32 +110,22 @@ class CatalogoProductos {
 	}
 		
 	/**
-	 * Añade un producto al catálogo, en su correspondiente array categoría y en el array 'todo'
+	 * Añade un nuevo producto ordenados por su código y a su vez por su categoría en una matriz de tipo catalogo["categoría"]["cod_producto"][Producto]
 	 * @param object $producto -> Perteneciente a la Clase 'Producto'
 	 * @return true: En caso de añadir el producto con éxito
 	 * 	       false: No añadirlo debido a no tener las propiedades de la clase o tener un código existente en el catálogo.
 	 */
-	public function Nuevo($producto) {
-		if ($this->esProducto($producto) && !$this->existe($producto)) {
-			$this->todo[]=$producto; // Todos los productos los almaceno en el array $todo
-			switch ($producto->__get("categoria")) {
-			    case 1:
-			    	$this->dormitorio[]=$producto;
-			        break;
-		        case 2:
-		        	$this->salon[]=$producto;
-		        	break;
-	        	case 3:
-	        		$this->cocina[]=$producto;
-	        		break;
-        		case 4:
-        			$this->baño[]=$producto;
-        			break;
-        		case 5:
-        			$this->exterior[]=$producto;
-        			break;
-			    default:
-			        return false; // En caso de haber una categoría diferente, la rechazo
+	public function Nuevo($producto) {	
+		
+		if ($this->EsProducto($producto) && !$this->Existe($producto)) {
+
+			if (!isset($this->catalogo[$producto->__get("categoria")])) { // Para crear una nueva categoría y añadir un primer producto a dicha categoría
+				$this->catalogo = $this->catalogo + [ $producto->__get("categoria") => [$producto->__get("codigo")=>$producto] ];
+				$this->size = $this->size + 2; // Incremento el tamaño +1 por categoría y +1 por el producto
+			}
+			else {// Para NO sobreescribir una categoría existente y añadir un producto nuevo a dicha categoría
+				$this->catalogo[$producto->__get("categoria")] = $this->catalogo[$producto->__get("categoria")] + [$producto->__get("codigo")=>$producto];
+				$this->size++; // Incremento el tamaño +1 por el producto
 			}
 			return true;
 		}

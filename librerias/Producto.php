@@ -10,6 +10,7 @@ class Producto {
 	// DECLARACIÓN VARIABLES.
 	private $codigo;
 	private $nombre;
+	private $id_categoria;
 	private $categoria;
 	private $precio;
 	private $descuento;
@@ -30,9 +31,10 @@ class Producto {
 	 * @param string $caracteristicas -> VARCHAR(200)
 	 * @param string $imagen -> string de la ruta
 	 */
-	public function Producto($codigo="", $nombre="", $categoria="", $precio="", $descuento="", $nuevo="", $caracteristicas="", $imagen="../imagenes/image_placeholder.png" ) {
+	public function Producto($codigo="", $nombre="", $id_categoria="", $categoria="", $precio="", $descuento="", $nuevo="", $caracteristicas="", $imagen="../imagenes/image_placeholder.png" ) {
 		$this->__set("codigo", $codigo);
 		$this->__set("nombre", $nombre);
+		$this->__set("id_categoria", $id_categoria);
 		$this->__set("categoria", $categoria);
 		$this->__set("precio", $precio);
 		$this->__set("descuento", $descuento);

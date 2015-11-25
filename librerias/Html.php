@@ -524,6 +524,45 @@
 		public static function _div() {
 			return "</div>"."\n";
 		}
+		
+		/**
+		 * Etiqueta de apertura &lt;details>
+		 * El guión bajo del final lo utilizo como indicador de que necesita ser cerrado con su correspondiente etiqueta de cierre.
+		 * @param string $class
+		 * @param string $id
+		 * @param string $otros_atributos
+		 */
+		public static function details_($class="", $id="",$otros_atributos="") {
+			$atributos = Html::atributosComunes($class, $id, $otros_atributos);
+				
+			if ($atributos!="")
+				return "<details $atributos>"."\n";
+			else
+				return "<details>"."\n";
+		}
+		/**
+		 * Etiqueta de cierre &lt;/details>
+		 * El guión bajo del principio lo utilizo como indicador de que necesita ser abierto con su correspondiente etiqueta de apertura.
+		 */
+		public static function _details() {
+			return "</details>"."\n";
+		}
+		
+		/**
+		 * Etiqueta summary &lt;summary>&lt;/summary>
+		 * @param string $contenido -> Contenido dentro de la etiqueta.
+		 * @param string $class -> Clase de la etiqueta.
+		 * @param string $id -> Id de la etiqueta.
+		 * @param string $otros_atributos -> Otros atributos de etiqueta que se quieran añadir manualmente.
+		 */
+		public static function summary($contenido="", $class="", $id="",$otros_atributos="") {
+			$atributos = Html::atributosComunes($class, $id, $otros_atributos);
+		
+			if ($atributos!="")
+				return "<summary {$atributos}>{$contenido}</summary>";
+			else
+				return "<summary>{$contenido}</summary>";
+		}		
 
 		/*********************************************************************************************************
 		 *
@@ -915,13 +954,76 @@
 			
 			foreach ($lista as $valor=>$texto) {
 				$c++;
-				if ($c==$select)					
+				if ($c==$select)				
 					$opciones.="$tab    <option selected value='$valor'>$texto</option>\n";
 				else
 					$opciones.="$tab    <option value='$valor'>$texto</option>\n";
 			}
 			
 			return "<select $atributos>\n$opciones$tab</select>"."\n";
+		}
+		
+		/**
+		 * Etiqueta de apertura &lt;select> (sin opciones).
+		 * 
+		 * @param string $name -> Asigna un nombre al control (es imprescindible para que el servidor pueda procesar el formulario).
+		 * @param string $class
+		 * @param string $id
+		 * @param string $otros_atributos
+		 */
+		public static function select_($name="", $class="", $id="", $otros_atributos="") {
+			$atributos = Html::atributosComunes($class, $id, $otros_atributos);
+			if ($name!="") $atributos.= "name='$name' ";
+			
+			return "<select $atributos>"."\n";
+		}
+		
+		/**
+		 * Etiqueta de cierre &lt;/select>
+		 */
+		public static function _select() {
+			return "</select>"."\n";
+		}
+		
+		/**
+		 * Etiqueta de apertura &lt;optgroup>.
+		 * 
+		 * @param string $label -> Texto de la etiqueta optgroup.
+		 * @param string $class
+		 * @param string $id
+		 * @param string $otros_atributos
+		 */
+		public static function optgroup_($label="", $class="", $id="", $otros_atributos=""){
+			$atributos = Html::atributosComunes($class, $id, $otros_atributos);
+			if ($label!="") $atributos.= "label='$label' ";
+				
+			return "<optgroup $atributos>"."\n";
+		}
+		
+		/**
+		 * Etiqueta de cierre &lt;/optgroup>
+		 */
+		public static function _optgroup() {
+			return "</optgroup>"."\n";
+		}
+		
+		/**
+		 * Etiqueta de &lt;option>&lt;/option>.
+		 * 
+		 * @param string $valor -> value
+		 * @param string $texto -> Contenido de la etiqueta option
+		 * @param string $selected -> Si aparece seleccionado o no.
+		 * @param string $class
+		 * @param string $id
+		 * @param string $otros_atributos
+		 */
+		public static function option($valor="", $texto="", $selected=false, $class="", $id="", $otros_atributos=""){
+			$atributos = Html::atributosComunes($class, $id, $otros_atributos);
+		
+			if ($selected)		
+				return "<option selected value='$valor' $atributos>$texto</option>\n";
+			else
+				return "<option value='$valor' $atributos>$texto</option>\n";
 		}
 	}
 ?>

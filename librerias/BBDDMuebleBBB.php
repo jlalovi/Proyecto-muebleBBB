@@ -8,6 +8,7 @@
 	class BBDDMuebleBBB {
 		
 		private $catalogo; // Objeto de la clase 'CatalogoProductos'
+		private $categorias; // Array por índice con el código de la categoría y su nombre.
 		private $BBDD;
 		
 		/**
@@ -25,12 +26,13 @@
 		public function cargarCatalogo() {
 			
 			//Almaceno datos de BBDD en array de productos con las propiedades de la BBDD
-			$productos= $this->BBDD->Consultar("productos", "*", "", true);
+			$productos= $this->BBDD->Consultar("productos", "*", "JOIN categorias ON categorias.id_categoria = productos.id_categoria ORDER BY categorias.categoria, productos.nombre", true);
 			
 			foreach ($productos as $producto) {
 				// Las propiedades la BBDD las traduzco a propiedades de la clase 'Producto'
 				$codigo=$producto["id_producto"];
-				$categoria=$producto["id_categoria"];
+				$categoria=$producto["categoria"];
+				$id_categoria=$producto["id_categoria"];
 				$nombre=$producto["nombre"];
 				$imagen=$producto["imagen"];
 				$precio=$producto["precio"];
@@ -39,7 +41,8 @@
 				$caracteristicas=$producto["caracteristicas"];
 			
 				// A partir de dichas propiedades creo y almaceno dichos productos en la clase 'Catálogo'
-				$this->catalogo->nuevo(new Producto($codigo, $nombre, $categoria, $precio, $descuento, $nuevo, $caracteristicas, $imagen));
+				$this->catalogo->Nuevo(new Producto($codigo, $nombre, $id_categoria, $categoria, $precio, $descuento, $nuevo, $caracteristicas, $imagen));
+
 			}
 		}
 		
@@ -49,14 +52,113 @@
 		public function getCatalogo() {
 			return $this->catalogo;
 		}
+		
+		/**
+		 * Generador de las categorías del muebleBBB a partir de su BBDD
+		 */
+		public function cargarCategorias() {
+			$this->categorias=array();
+			$cats = $this->BBDD->Consultar("categorias", "*", "ORDER BY categoria", true);
+			
+			foreach ($cats as $c) {
+				$codigo=$c["id_categoria"];
+				$categoria=$c["categoria"];
+				
+				$nueva_categoria = array("$codigo"=>"$categoria");
+				$this->categorias = $this->categorias + $nueva_categoria;
+			}
+		}
+				
+		/**
+		 * Getter las categorías de la BBDD muebleBBB
+		 */
+		public function getCategorias() {
+			return $this->categorias;
+		}
+		
+		public function existeCategoria($categoria) {
+			$this->cargarCategorias();
+			foreach ($this->categorias as $valor=>$cat) {
+				$esCategoria=false;
+				if ($categoria==$cat) {
+					$esCategoria = true;
+					break;
+				}
+			}
+			return $esCategoria;
+		}
+		
+		public function existeIdCategoria($id_categoria) {
+			$this->cargarCategorias();
+			foreach ($this->categorias as $valor=>$cat) {
+				$esCategoria=false;
+				if ($id_categoria==$valor) {
+					$esCategoria = true;
+					break;
+				}
+			}
+			return $esCategoria;
+		}
+		
+		public function getCategoria($id_categoria) {
+			$this->cargarCategorias();
+			foreach ($this->categorias as $valor=>$cat) {
+				if ($id_categoria==$valor) {
+					return $cat;
+				}
+			}
+			return false;
+		}
 	
+		public function actualizarCategorias($request) {
+			// BORRAR
+			if (isset($request["borrar"])) {
+				$this->cargarCatalogo();
+				$catalogo = $this->getCatalogo();
+				$productos = $catalogo->getProductos();
+				$cat = $this->getCategoria($request["categoria_id"]);
+				
+				$productos_en_categoria = isset($productos["$cat"]);
+				
+				if (!$productos_en_categoria) { // Borraré la categoría de la BBDD, si esta NO contiene productos.
+					$this->BBDD->DeleteFrom("categorias", "id_categoria={$request["categoria_id"]}");
+					return true;
+				}
+				else return false;
+			}
+			
+			// CREAR
+			else if (isset($request["nueva_categoria"])) {
+				// VALIDACIONES
+				$valida_nombre = validarNumCar($request["nueva_categoria"], 10);
+				
+				if ($valida_nombre && !$this->existeCategoria($request["nueva_categoria"])) {
+					$this->BBDD->InsertInto("categorias", "id_categoria, categoria", "{$request["id_categoria"]}, '{$request["nueva_categoria"]}'");
+					return true;
+				}
+				else return false;
+			}		
+			
+			// MODIFICAR
+			else if (isset($request["nuevo_nombre_categoria"])) {
+				// VALIDACIONES
+				$valida_nombre = validarNumCar($request["nuevo_nombre_categoria"], 10);
+			
+				if ($valida_nombre && !$this->existeCategoria($request["nuevo_nombre_categoria"])) {
+					$this->BBDD->Update("categorias", "categoria", "'{$request["nuevo_nombre_categoria"]}'", "id_categoria='{$request["categoria_id"]}'");
+					return true;
+				}
+				else return false;
+			}
+		}
+		
 		/**
 		 * Actualiza un producto de la BBDD de MySQL en función de los datos enviados por parámetro al Guardar cambios.
 		 * Esta actualización puede consistir en borrar el producto de la BBDD o en modificar sus datos.
 		 * @param object $request -> Datos provenientes del $_GET de 'Nuevo producto' y 'Buscar producto' y del $_POST de 'Producto'
 		 * @param object $imagen -> Archivo que se ha almacenado en la varible $_FILES en el formulario.
 		 */
-		public function actualizarBBDD($request, $imagen) {
+		public function actualizarProductos($request, $imagen) {
 			// BORRAR
 			if (isset($request["borrar"])) {
 				echo Html::p("Se ha BORRADO el producto con ID {$request["codigo"]} con éxito.", "mensaje_correcto");				
@@ -90,7 +192,7 @@
 			}
 			
 			// MODIFICAR
-			else if (isset($request["buscar_producto"])) {
+			else if (isset($request["id_modificar_producto"])) {
 				
 				// VALIDACIONES
 				$valida_nombre = validarNumCar($request["nombre"], 20);

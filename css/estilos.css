@@ -13,8 +13,39 @@ body {
 	margin:0;
 	background: #fff;
 	font-family: sans-serif;
-
 }
+
+input {
+	font-size: 15px;
+	outline: none;
+	padding: 2px 5px;
+}
+	input:focus {
+		box-shadow: 0 0 5px #997F64;
+		border: 2px solid rgba(153, 127, 100, 0.63);
+	}
+	
+input[readonly="readonly"] {
+	background: #FFEEDD;
+	outline: initial;
+}
+	input[readonly="readonly"]:focus {
+		outline: initial;
+		box-shadow: initial;
+		border: 2px inset;
+	}
+
+select,
+textarea {
+	outline: none;
+	padding: 2px 5px;
+}
+	select:focus,
+	textarea:focus {
+		box-shadow: 0 0 5px #997F64;
+		border: 1px solid #997F64;
+	}
+
 .clear {
 	clear: both;
 }
@@ -36,9 +67,14 @@ body {
     font-size: 18px;
 }
 .mensaje_correcto {
-	color: #3E27C0;
+	color: #3B5300;
     font-size: 18px;
 }
+	span.error,
+	span.mensaje_correcto {
+		font-size: 20px;
+		cursor: help;
+	}
 
 /***************************************************** ENCABEZADO *****************************************************/
 header {
@@ -95,11 +131,11 @@ nav {
 			position: absolute;
 			top: 20px;
 			padding-left: 22px;
+			outline: none;
 		}
 			.buscador .texto_busqueda:focus { 
-			    outline: none;
-			    border-color: #9ecaed;
 			    box-shadow: 0 0 5px #997F64;
+				border: 2px solid rgba(153, 127, 100, 0.63);
 			}
 		.buscador .lupa {
 			position: absolute;
@@ -135,7 +171,7 @@ nav {
 
 /***************************************************** CONTENIDO *****************************************************/
 #cuerpo {
-	width: 1000px;
+	max-width: 1500px;
 	margin: 20px auto;
 }
 
@@ -199,6 +235,7 @@ nav {
 		}
 			.categoria {
 				line-height: 30px;
+				overflow: hidden;
 			}
 			.precio {
 				border-left: 1px solid #ccc;
@@ -212,13 +249,14 @@ nav {
 	/* INICIO */
 	/**********/
 	.columnas_inicio {
-		width: 499px;
+		width: 732px;
 	}
 		.columnas_inicio h1 {
 			padding-left: 32px;
 		}
 	.ofertas {
 		border-right: 1px solid #ccc;
+		padding-right: 30px;
 	}
 	
 	/**************/
@@ -270,7 +308,6 @@ nav {
 	/******************/
 	
 	#cuerpo_admin {
-		width: 456px;
 		margin: 20px 100px;
 	}
 	
@@ -284,9 +321,26 @@ nav {
     	font-style: italic;
 	}
 	
+	.enlace_volver {
+		color: #3D2712;
+    	text-decoration: none;
+    	font-weight: bold;
+    	margin: 30px 0 100px;
+    	display: block;
+	}
+		.enlace_volver:hover span.estilo {
+			text-decoration: underline;
+		}
+	
+	.formularios_producto,
+	.formularios_categoria {
+		width: 375px;
+		padding: 10px;
+		display: inline-table;
+	}
+	
 	.opciones_admin {
-		margin: 20px auto;
-		display: inline-block;
+		margin: 20px 0;
 		padding: 15px;
 		-webkit-box-shadow: 1px 1px 3px 0px rgba(153,127,100,1);
 		-moz-box-shadow: 1px 1px 3px 0px rgba(153,127,100,1);
@@ -309,15 +363,60 @@ nav {
 			.opciones_admin label.etiqueta_categoria {
 				font-weight: normal;
 			}
+		
+		.contenedor_nueva_categoria {
+			position: relative;
+		}
+			.mensaje_nueva_categoria {
+				position: absolute;
+				top: 87px;
+    			right: 20px;
+			}
 			
+		.contenedor_modificar_categoria {
+			position: relative;
+		}
+			.mensaje_modificar_categoria {
+				position: absolute;
+				bottom: 0px;
+    			left: 20px;
+			}
+			#modificar_categorias {
+				width: 172px;
+				font-size: 16px;
+				margin: 10px 10px 22px 0;
+			}
+			#nombreModificarCategoria {
+				width: 120px;
+			}
+			#btnModificarCategoria {
+				float: right;
+				margin-top: 25px;
+			}
+		
 		.contenedor_nuevo_producto {}
+			.contenedor_nueva_categoria input,
+			.contenedor_nuevo_producto input{
+				margin: 10px 4px;
+				font-size: 15px;
+			}
 			#campoNuevoProducto {
 				display:none;
 			}
 					
-		.contenedor_buscar_producto {}
-		
-		.contenedor_datos_producto {}
+		.contenedor_modificar_producto {}
+			#modificar_productos {
+				font-size: 16px;
+				margin: 10px 10px 22px 0;
+				width: 300px;
+			}
+				#btnModificarProducto {
+					float: right;
+				}
+				
+		.contenedor_datos_producto {
+			width: 475px;
+		}
 			.contenedor_datos_producto input,
 			.contenedor_datos_producto textarea {
 				margin: 10px 4px;
@@ -385,6 +484,16 @@ footer {
 	}
 	
 /***************************************************** QUERIES ***********************************************************/
+
+@media screen and (max-width: 1550px) {
+	#cuerpo {
+		max-width: 1010px;
+		margin: 20px auto;
+	}
+		.columnas_inicio {
+			width: 488px;
+		}
+}
 
 @media screen and (max-width: 1300px) {
 	
@@ -538,11 +647,7 @@ footer {
 		.contenedor_datos_producto {
 			width: 90%;
 		}
-		.contenedor_nuevo_producto,
-		.contenedor_buscar_producto {
-			width: 195px;
-			display: block;
-		}
+
 }
 
 @media screen and (max-width: 480px) {
@@ -553,5 +658,5 @@ footer {
 			width: 310px;
 			height: 108px;
 		}
-	
+
 }

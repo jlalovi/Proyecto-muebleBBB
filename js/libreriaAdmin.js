@@ -20,11 +20,28 @@ window.onload=ejecuta;
 			}
 		}
 		
-		var CheckBoxBorrar = document.getElementById("borrarProductoCB");
-		if (CheckBoxBorrar!=null) {
-			CheckBoxBorrar.onchange = function() {
-				if (borrarProductoCB.checked)
-					alert("Desmarca la casilla si NO deseas borrar el producto al presionar 'Guardar cambios'.");
+		var CheckBoxBorrarProd = document.getElementById("borrarProductoCB");
+		if (CheckBoxBorrarProd!=null) {
+			CheckBoxBorrarProd.onchange = function() {
+				if (CheckBoxBorrarProd.checked)
+					alert("Desmarca la casilla si NO deseas borrar el producto al presionar 'Modificar'.");
+			}
+		}
+		
+		var CheckBoxBorrarCat = document.getElementById("borrarCategoriaCB");
+		if (CheckBoxBorrarCat!=null) {
+			CheckBoxBorrarCat.onchange = function() {
+				var nuevoNombreCat = document.getElementById("nombreModificarCategoria");
+				if (CheckBoxBorrarCat.checked) {
+					nuevoNombreCat.setAttribute("class", "invisible");
+					nuevoNombreCat.value="borrar";
+					alert("Desmarca la casilla si NO deseas borrar la categoria al presionar 'Modificar'.");
+				}
+				else {
+					nuevoNombreCat.value="";
+					nuevoNombreCat.setAttribute("class", "visible_inline");
+				}
+					
 			}
 		}
 	}
