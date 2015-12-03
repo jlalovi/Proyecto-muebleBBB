@@ -6,7 +6,7 @@
 	require_once '../librerias/BBDDMuebleBBB.php';
 	require_once '../librerias/formulariosMuebleBBB.php';
 	
-	//Inicializo la base de datos muebleBBB para hacer una consulta en el siguiente paso
+	//Inicializo la base de datos muebleBBB
 	$BBDD = new MySQLDataBase("mueblebbb");
 	$MuebleBBB = new BBDDMuebleBBB($BBDD);
 		

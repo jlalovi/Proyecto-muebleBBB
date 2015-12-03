@@ -11,6 +11,19 @@ class CatalogoProductos {
 	 * @var number -> Indica el número de categorías + productos en el catálogo. Esto me será útil en el tamaño del selector.
 	 */
 	private $size;
+	/**
+	 * @var array -> Array de productos considerados novedad
+	 */
+	private $novedad;
+	/**
+	 * @var array -> Array de productos considerados oferta
+	 */
+	private $oferta;
+	/**
+	 * @var array -> Array de productos considerados normales
+	 */
+	private $normal;
+	
 	
 	//CONSTRUCTOR
 	/**
@@ -22,6 +35,9 @@ class CatalogoProductos {
 	 */
 	public function CatalogoProductos() {
 		$this->catalogo=array(); // Se inicializa como vector normal
+		$this->normal=array();
+		$this->novedad=array();
+		$this->oferta=array();
 		$this->size=0; // Inicializo el tamaño de '$size' a 0
 	}
 	
@@ -33,6 +49,15 @@ class CatalogoProductos {
 	}
 	public function getSize() {
 		return $this->size;
+	}
+	public function getNovedades() {
+		return $this->novedad;
+	}
+	public function getOfertas() {
+		return $this->oferta;
+	}
+	public function getNormales() {
+		return $this->normal;
 	}
 	
 	//métodos
@@ -108,6 +133,40 @@ class CatalogoProductos {
 		if (!$existe)
 			return false;
 	}
+	
+	/**
+	 * Busca productos que coinciden con el patrón de búsqueda '$coincidencia'
+	 * @param string $coincidencia -> Patrón de búsqueda de productos con ese contenido en nombre, catálogo o características
+	 * @return array de productos que coinciden con el patrón de búsqueda
+	 */
+	public function BuscarProductos($coincidencia="") {
+		if ($coincidencia=="") return false;
+		$busqueda = strtolower($coincidencia);		
+		$productos=array();		
+		foreach ($this->catalogo as $categoria=>$valor) {
+			foreach ($valor as $producto) {				
+				// Nombre producto
+				$nombre = strtolower($producto->__get("nombre"));
+				if (substr_count($nombre, $busqueda)>0) {
+					array_push($productos, $producto);
+					continue;
+				}
+				// Categoría producto
+				$categoria = strtolower($producto->__get("categoria"));
+				if (substr_count($categoria, $busqueda)>0) {
+					array_push($productos, $producto);
+					continue;				}
+				// Características producto
+				$caracateristicas = strtolower($producto->__get("caracteristicas"));
+				if (substr_count($caracateristicas, $busqueda)>0) {
+					array_push($productos, $producto);
+				}
+			}
+		}
+		if (empty($productos))
+			return false;
+		else return $productos;
+	}
 		
 	/**
 	 * Añade un nuevo producto ordenados por su código y a su vez por su categoría en una matriz de tipo catalogo["categoría"]["cod_producto"][Producto]
@@ -119,6 +178,18 @@ class CatalogoProductos {
 		
 		if ($this->EsProducto($producto) && !$this->Existe($producto)) {
 
+			// Almaceno el producto en el array 'Novedad', 'Oferta' o 'Normal':
+			if ($producto->__get("descuento")!="0") {
+				array_push($this->oferta, $producto);
+			}
+			else if ($producto->__get("nuevo")) {
+				array_push($this->novedad, $producto);
+			}
+			else {
+				array_push($this->normal, $producto);
+			}
+			
+			// Almaceno el producto en el array catalogo[categoria][cod_producto][producto]
 			if (!isset($this->catalogo[$producto->__get("categoria")])) { // Para crear una nueva categoría y añadir un primer producto a dicha categoría
 				$this->catalogo = $this->catalogo + [ $producto->__get("categoria") => [$producto->__get("codigo")=>$producto] ];
 				$this->size = $this->size + 2; // Incremento el tamaño +1 por categoría y +1 por el producto

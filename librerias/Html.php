@@ -1012,7 +1012,7 @@
 		 * 
 		 * @param string $valor -> value
 		 * @param string $texto -> Contenido de la etiqueta option
-		 * @param string $selected -> Si aparece seleccionado o no.
+		 * @param bool $selected -> Si aparece seleccionado o no.
 		 * @param string $class
 		 * @param string $id
 		 * @param string $otros_atributos

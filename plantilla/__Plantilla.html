@@ -28,14 +28,28 @@
 				<li><a href='catalogo.php'>Catálogo</a></li>
 				<li><a href='quienes_somos.php'>Quiénes somos</a></li>
 				<li><a href='contacto.php'>Contacto</a></li>
+				<!-- PHP if privilegio de admin -->
+				<li><a href='admin.php'>Administración</a></li>
 			</ul>
 			<form class="buscador right" action="resultados_busqueda.php" method="post">
-				<input class="texto_busqueda" type="text" id="busca" name="busca" value="" size="20"/>
+				<input class="texto_busqueda" type="text" id="busca" name="busca" value="" size="15"/>
 				<input class="invisible" type="submit" value="enviar">
 				<span class="lupa fontawesome-search"></span>
 			</form>
 			<div class="clear"></div>
 		</nav>
+		<!-- PHP if privilegio de cliente/admin -->
+		<div class="usuario_carrito right">
+				<p class="usuario">
+					<span class="bienvenido">Bienvenido/a <em>Usuario/a</em>.</span>
+					<!-- Sino se ha iniciado sesión ni existe el POST  -->
+					<span class="caja_inicia_sesion"><a id="inicia_sesion" class="inicia_sesion" href="#">Iniciar sesión</a></span>
+					<a class="cierra_sesion" href="#">Cerrar sesión</a>
+				</p>
+				<!-- PHP if privilegio de cliente -->
+				<a href="#" class="carrito"><span class="cantidad_pedidos">5</span><span class="icon fontawesome-shopping-cart"></span></a>
+		</div>
+		<div class="clear"></div>
 		
 		<div id="cuerpo">
 			{{body}}

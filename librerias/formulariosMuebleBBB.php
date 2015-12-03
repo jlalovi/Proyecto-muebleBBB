@@ -28,7 +28,6 @@
 		Html::div_("opciones_admin contenedor_modificar_producto").
 			Html::form_("admin_datos_producto.php", "GET").
 				Html::seccion(1,"MODIFICAR PRODUCTO");
-				$size = $catalogo->getSize(); // Para definir la altura del 'select'
 				echo Html::select_("id_modificar_producto", "", "modificar_productos", "required='required' size='15'");
 					$productos = $catalogo->getProductos();				
 					foreach ($productos as $categoria=>$id_producto) {
