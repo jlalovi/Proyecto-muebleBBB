@@ -1,14 +1,19 @@
 <?php
 	// Librerías
-	require_once '../librerias/GestionaPlantilla.php';
 	require_once '../librerias/Html.php';
+	require_once '../html/cabecera.php';
+	require_once '../html/encabezado.php';
+	require_once '../html/nav.php';
+	require_once '../html/pie.php';
+	require_once '../html/sesion_carrito.php';
 	
-	GestionaPLantilla::Inicio_Plantilla("../plantilla/__Plantilla.html");
-
-	//Contenido HTML construído a través de métodos estáticos de la clase Html (Ver documentación en caso de duda).
-	echo		
-		Html::p("Aquí va el cuerpo de la página");
-
-	
-	GestionaPLantilla::Fin_Plantilla();
+	/***************************************************
+	 GENERO EL HTML DE LA PÁGINA POLITICA_PRIVACIDAD.PHP
+	 ***************************************************/
+	echo cabecera("MUEBLEBBB - Privacidad", "../css/estilos.css", "../js/libreria.js");
+	echo encabezadoIndex();
+	echo navIndex();
+	echo sesion_carritoIndex();
+	echo Html::p("Aquí va el cuerpo de la página");
+	echo pie();
 ?>

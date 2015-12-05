@@ -1,10 +1,13 @@
 <?php
 	// Librerías
-	require_once '../librerias/GestionaPlantilla.php';
 	require_once '../librerias/Html.php';
 	require_once '../librerias/MySQLDataBase.php';
 	require_once '../librerias/BBDDMuebleBBB.php';
-	require_once '../librerias/formulariosMuebleBBB.php';
+	require_once '../html/cabecera.php';
+	require_once '../html/encabezado.php';
+	require_once '../html/nav.php';
+	require_once '../html/pie.php';
+	require_once '../html/sesion_carrito.php';
 	
 	//Inicializo la base de datos muebleBBB y obtengo los productos catalogados como 'novedades' y 'ofertas'
 	$BBDD = new MySQLDataBase("mueblebbb");
@@ -20,8 +23,14 @@
 		$codigo = $_GET["id_producto"];
 	} else	$codigo ="";
 	
-	// Plantilla HTML y su contenido:
-	GestionaPLantilla::Inicio_Plantilla("../plantilla/__Plantilla.html");
+	/****************************************
+	 GENERO EL HTML DE LA PÁGINA CATALOGO.PHP
+	*****************************************/
+	echo cabecera("MUEBLEBBB - Catálogo", "../css/estilos.css", "../js/libreria.js");
+	echo encabezadoIndex();
+	echo navIndex();
+	echo sesion_carritoIndex();
+	
 	echo Html::div_("contenedor_catalogo");
 	
 		//$size = $catalogo->getSize(); // Para definir la altura del 'select'
@@ -76,5 +85,6 @@
 		}
 
 	echo Html::_div();
-	GestionaPLantilla::Fin_Plantilla();
+	
+	echo pie();
 ?>

@@ -1,9 +1,13 @@
 <?php
 	// Librerías
-	require_once '../librerias/GestionaPlantilla.php';
 	require_once '../librerias/Html.php';
 	require_once '../librerias/BBDDMuebleBBB.php';
-	require_once '../librerias/formulariosMuebleBBB.php';
+	require_once '../html/formulariosMuebleBBB.php';
+	require_once '../html/cabecera.php';
+	require_once '../html/encabezado.php';
+	require_once '../html/nav.php';
+	require_once '../html/pie.php';
+	require_once '../html/sesion_carrito.php';
 	
 	//Inicializo la BBDD de MuebleBBB, cargo el catálogo y lo recojo en una variable.
 	if (empty($_POST)) {
@@ -15,9 +19,11 @@
 	
 	/****************************************************
 	 GENERO EL HTML DE LA PÁGINA ADMIN_DATOS_PRODUCTO.PHP
-	 ****************************************************/
-	
-	GestionaPLantilla::Inicio_Plantilla("../plantilla/__PlantillaAdmin.html");
+	 ****************************************************/	
+	echo cabecera("MUEBLEBBB - Administración", "../css/estilos.css", "../js/libreriaAdmin.js");
+	echo encabezadoAdmin();
+	echo navAdmin();
+	echo sesion_carritoAdmin();
 
 	// Si $_POST no está vacío es que se ha realizado una solicitud de 'Añadir producto' o 'Modificar producto' en admin.php
 	if (!empty($_POST)) {
@@ -76,6 +82,6 @@
 	echo Html::_details();								//*
 	/* FIN TESTEO *************************************///*
 	
-	GestionaPLantilla::Fin_Plantilla();
+	echo pie();
 	
 ?>
