@@ -5,12 +5,13 @@ CREATE DATABASE IF NOT EXISTS mueblebbb;
 
 USE mueblebbb;
 -- En caso de querer reiniciar las tablas:
+drop table if exists lineas_pedido;
 drop table if exists productos;
 drop table if exists categorias;
 drop table if exists perfil_usuario;
 drop table if exists usuarios;
 drop table if exists perfiles;
-drop table if exists lineas_pedido;
+
 
 -- Tablas
 
@@ -35,14 +36,14 @@ CREATE TABLE IF NOT EXISTS productos (
 
 CREATE TABLE IF NOT EXISTS usuarios (
 	id_usuario INT,
-    nombre VARCHAR(15),
+    usuario VARCHAR(15),
     passwd VARCHAR(15),
 	CONSTRAINT pk_usuarios PRIMARY KEY(id_usuario)
 );
 
 CREATE TABLE IF NOT EXISTS perfiles (
 	id_perfil INT,
-    nombre VARCHAR(7), -- cliente o admin
+    perfil VARCHAR(7), -- cliente o admin
 	CONSTRAINT pk_perfiles PRIMARY KEY(id_perfil)
 );
 
@@ -58,13 +59,15 @@ CREATE TABLE IF NOT EXISTS perfil_usuario (
 CREATE TABLE IF NOT EXISTS lineas_pedido (
 	id_pedido INT,
 	id_producto INT,
+    id_usuario INT,
     cantidad INT,
     precio INT,
     descuento INT,
     -- id_factura INT,
     -- numero_linea,
 	CONSTRAINT pk_lineas_pedido PRIMARY KEY(id_pedido),
-    CONSTRAINT fk_productos_en_lineas_pedido FOREIGN KEY (id_producto) REFERENCES productos(id_producto)
+    CONSTRAINT fk_productos_en_lineas_pedido FOREIGN KEY (id_producto) REFERENCES productos(id_producto),
+    CONSTRAINT fk_usuarios_en_lineas_pedido FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
 );
 
 -- Datos por defecto
@@ -116,7 +119,7 @@ INSERT INTO productos (id_producto, id_categoria, nombre, imagen, precio, descue
         (35, 2, "Tabla cortar", "../imagenes/_ID35-tabla_cortar.jpg", 49, 0, false, "Tabla de cortar realizada en madera. Amenizada con un acabado multicolor."),
         (36, 3, "Vitrina baño", "../imagenes/_ID36-vitrina_banyo.jpg", 268, 0, false, "Vitrina de baño estilo clásico de madera. Color verde con estampado de una flor.");
 
-INSERT INTO usuarios (id_usuario, nombre, passwd)
+INSERT INTO usuarios (id_usuario, usuario, passwd)
 	VALUES 
 		(0,"superadmin", "1234"), -- admin y cliente
         (1,"admin", "1234"), -- admin
@@ -127,7 +130,7 @@ INSERT INTO usuarios (id_usuario, nombre, passwd)
         (6,"sandra", "1234"), -- cliente
         (7,"raul", "1234"); -- cliente
  
- INSERT INTO perfiles (id_perfil, nombre)
+ INSERT INTO perfiles (id_perfil, perfil)
 	VALUES 
 		(0,"admin"),
 		(1,"cliente");
@@ -154,3 +157,4 @@ SELECT * FROM productos;
 SELECT * FROM categorias;
 
 SELECT * FROM productos JOIN categorias ON categorias.id_categoria = productos.id_categoria ORDER BY categorias.categoria, productos.nombre;
+

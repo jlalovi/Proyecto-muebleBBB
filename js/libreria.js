@@ -13,6 +13,16 @@ window.onload=ejecuta;
 			}
 		}
 		
+		// Botón de despliegue del menú en pantallas estrechas.
+		var botonIniciaSesion = document.getElementById("inicia_sesion");
+		if (botonIniciaSesion!=null) {
+			botonIniciaSesion.onclick= function() {
+				var desplegable = document.getElementById("desplegable_inicia_sesion");
+				desplegable.classList.toggle("invisible");
+				botonIniciaSesion.classList.toggle("fondo_onclick");
+			}
+		}
+		
 		// Selector de productos en catálogo.php
 		var selectorProductos = document.getElementById("seleccionar_producto");
 		if (selectorProductos!=null) {

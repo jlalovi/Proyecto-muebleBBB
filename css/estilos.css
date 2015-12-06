@@ -56,6 +56,13 @@ textarea {
 	    background: #488f8f repeat url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2O0VRf6DwAClgF34DiKsQAAAABJRU5ErkJggg==");
 	}
 
+::-moz-selection {
+    background: #A38C72;
+}
+::selection {
+    background: #A38C72;
+}
+
 .clear {
 	clear: both;
 }
@@ -64,6 +71,9 @@ textarea {
 }
 .visible_inline {
 	display: inline-block;
+}
+.visible_block {
+	display: block;
 }
 .left {
 	float: left;
@@ -127,7 +137,7 @@ header {
 nav {
 	background: #3D2712;
 	padding: 0px 5%;
-	height: 58px;
+	height: 60px;
 }
 	#desplegable {
 		display: none;
@@ -135,12 +145,12 @@ nav {
 	.buscador {
 		display: block;
 		width: 200px;
-		position: relative;
+		height: 60px;
+	    margin-right: 100px;
+	    position: relative;
+	    top: 18px;
 	}
 		.buscador .texto_busqueda {
-			position: absolute;
-			top: 17px;
-			right: 120px;
 			padding-left: 22px;
 			outline: none;
 		}
@@ -150,8 +160,8 @@ nav {
 			}
 		.buscador .lupa {
 			position: absolute;
-			left: -100px;
-			top: 19px;
+			left: 5px;
+			top: 2px;
 			font-size: 17px;
 			color: #191D0F;
 		}
@@ -190,10 +200,10 @@ nav {
 	}
 	.usuario {
 		margin: 0;
-		padding: 16px;
+		padding: 16px 0;
 	}
 		.caja_inicia_sesion {
-			width: 255px;
+			width: 260px;
 			display: block;
 			text-align: right;
 		}
@@ -203,10 +213,80 @@ nav {
 			color: #191D0F;
 			font-weight: bold;
 		}
-			.inicia_sesion:hover,
 			.cierra_sesion:hover {
 				text-decoration: underline;
 			}
+			
+		.inicia_sesion {
+			display: block;
+			padding: 5px;
+			text-align: right;
+			border-top-left-radius: 60px;	
+		}
+			.inicia_sesion.fondo_onclick {
+				background: #EBEBEB;
+			}
+			.inicia_sesion:hover {
+				background: #EBEBEB;
+			}
+			.desplegable_inicia_sesion {
+				padding: 15px 20px 12px 20px;
+				border: 2px solid #EBEBEB;
+				background: #fff;
+				border-radius: 0 0 4px 4px;
+				position: absolute;
+				z-index: 100;
+				height: 160px;
+				width: 216px;
+    			overflow: hidden;
+    			transition: height 0.2s;
+			}
+				.desplegable_inicia_sesion.invisible {
+					height: 0;
+					padding: 0 20px 0 20px;
+				    display: block;
+				    border: 2px solid #fff;
+					display: block;
+				}
+			.desplegable_inicia_sesion input {
+				padding: 6px 10px;
+				width: 193px;
+				margin: 0;
+			}
+				.desplegable_inicia_sesion input:focus {
+					box-shadow: initial;
+					border: 2px inset;
+				}
+				.error_usuario,
+				.error_password {
+					font-size: 12px;
+					display: block;
+					text-align: left;
+					margin: 5px 0px;
+					color: #C02929;
+					font-style: italic;
+				}
+					.error_usuario.hidden,
+					.error_password.hidden {
+						visibility: hidden;
+					}
+				#comprobar_inicio_sesion {
+					width: 100%;
+					margin: 10px 0;
+					border: 0;
+				    border-radius: 1px;
+				    text-transform: uppercase;
+				    white-space: nowrap;
+				    text-shadow: 0 -1px 0 rgba(67,67,67,.3);
+				    background: #191D0F;
+				    color: #fff;
+				    font-family: 'Montserrat',sans-serif;
+				    cursor: pointer;
+				    padding: 8px 10px;
+				}
+					#comprobar_inicio_sesion:hover {
+						background: #3B4521;
+					}
 					
 
 	.carrito {
@@ -257,7 +337,7 @@ nav {
 				/* Opera */
 				-o-transform:rotate(360deg) ;
 				/* Standard */
-				transform: rotate (360deg);
+				transform: rotate(360deg);
 			}
 				
 
@@ -786,11 +866,13 @@ footer {
 	/*NAV*/
 		
 	.buscador .texto_busqueda {
-		right: 120px;
 		width: 110px;
 	}
-	.buscador .lupa {
-		left: -58px;
+	
+	/* CARRITO */
+		
+	.carrito {
+		right: 0px;
 	}
 	
 	/*BODY*/
@@ -821,26 +903,15 @@ footer {
 }
 
 @media screen and (max-width: 480px) {
-	
-	/*NAV*/
-	
-	.buscador .texto_busqueda {
-		right: 73px;
-		width: 110px;
-	}
-	.buscador .lupa {
-		left: -12px;
+
+	/*nav*/
+	.buscador {
+		margin-right: 10px;
 	}
 	
-	
-	/*CARRITO*/
-	.usuario_carrito {
-		float: none;
-		margin: 0;
-	}
-	
+	/*carrito*/
 	.carrito {
-		right: 25px;
+		right: -56px;
 	}
 	
 	.bienvenido,

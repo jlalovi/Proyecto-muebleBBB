@@ -9,6 +9,13 @@
 	require_once '../html/pie.php';
 	require_once '../html/sesion_carrito.php';
 	
+	// Inicio sesión
+	session_start();
+	// Compruebo que se está accediente a la página con los privilegios adecuados
+	if (!isset($_SESSION["admin"]) || $_SESSION["admin"]==false) {
+		header("location:inicio.php");
+	}
+	
 	//Inicializo la BBDD de MuebleBBB, cargo el catálogo y lo recojo en una variable.
 	if (empty($_POST)) {
 		$BBDD = new MySQLDataBase("mueblebbb");
@@ -23,7 +30,7 @@
 	echo cabecera("MUEBLEBBB - Administración", "../css/estilos.css", "../js/libreriaAdmin.js");
 	echo encabezadoAdmin();
 	echo navAdmin();
-	echo sesion_carritoAdmin();
+	echo sesion_carritoAdmin($_SESSION);
 
 	// Si $_POST no está vacío es que se ha realizado una solicitud de 'Añadir producto' o 'Modificar producto' en admin.php
 	if (!empty($_POST)) {
@@ -52,6 +59,11 @@
 		$MuebleBBB->cargarCategorias();
 		$categorias = $MuebleBBB->getCategorias();
 		contenedorDatosNuevoProducto($_GET, $categorias);
+	}
+	
+	// Compruebo si se ha enviado algún código para comprobar. Sino es el caso se está intentando acceder incorrectamente.
+	else if (!isset($_GET['id_modificar_producto'])) {
+		header("location:admin.php");
 	}
 	
 	// Compruebo si el código introducido existe.

@@ -16,14 +16,15 @@
 	$BBDD = new MySQLDataBase("mueblebbb");
 	$MuebleBBB = new BBDDMuebleBBB($BBDD);
 	
-	/*******************************************
-	 GENERO EL HTML DE LA PÁGINA AVISO_LEGAL.PHP
-	 *******************************************/
-	echo cabecera("MUEBLEBBB - Aviso Legal", "../css/estilos.css", "../js/libreria.js");
+	/***************************************
+	 GENERO EL HTML DE LA PÁGINA CARRITO.PHP
+	 ***************************************/
+	echo cabecera("MUEBLEBBB - Carrito", "../css/estilos.css", "../js/libreria.js");
 	echo encabezadoIndex();
 	
 	navegacion_sesion($_POST, $MuebleBBB);
 
 		echo Html::p("Aquí va el cuerpo de la página");
+		
 	echo pie();
 ?>

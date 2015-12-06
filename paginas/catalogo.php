@@ -3,13 +3,16 @@
 	require_once '../librerias/Html.php';
 	require_once '../librerias/MySQLDataBase.php';
 	require_once '../librerias/BBDDMuebleBBB.php';
+	require_once '../librerias/navegacion_sesion.php';
 	require_once '../html/cabecera.php';
 	require_once '../html/encabezado.php';
 	require_once '../html/nav.php';
 	require_once '../html/pie.php';
 	require_once '../html/sesion_carrito.php';
 	
-	//Inicializo la base de datos muebleBBB y obtengo los productos catalogados como 'novedades' y 'ofertas'
+	// Inicio sesión
+	session_start();
+	//Inicializo la base de datos muebleBBB
 	$BBDD = new MySQLDataBase("mueblebbb");
 	$MuebleBBB = new BBDDMuebleBBB($BBDD);
 	$MuebleBBB->cargarCatalogo();
@@ -28,8 +31,8 @@
 	*****************************************/
 	echo cabecera("MUEBLEBBB - Catálogo", "../css/estilos.css", "../js/libreria.js");
 	echo encabezadoIndex();
-	echo navIndex();
-	echo sesion_carritoIndex();
+	
+	navegacion_sesion($_POST, $MuebleBBB);
 	
 	echo Html::div_("contenedor_catalogo");
 	

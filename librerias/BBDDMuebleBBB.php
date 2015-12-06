@@ -20,6 +20,7 @@
 			$this->BBDD = $BBDD;
 		}
 
+		
 		/**
 		 * Generador del contenido del catálogo de muebleBBB a partir de su BBDD
 		 */
@@ -54,7 +55,41 @@
 		}
 		
 		/**
-		 * Generador de las categorías del muebleBBB a partir de su BBDD
+		 * Comprueba si el usuario existe y si su contraseña es válida. También conprueba los privilegios del usuario en caso de tener su nombre y contraseña correctos.
+		 * @return array -> [true, true, bool, bool]: en caso de se usuario y contraseñas válidos (Los siguientes dos booleanos corresponden a los privilegios de Admin y Cliente respectivamente)
+		 * 					[false, false]: en caso de ser el nombre de usuario incorrecto (en este caso NO se comprueban contraseñas)
+		 * 					[true, false]: en caso de ser el nombre de usuario correcto, pero su contraseña incorrecta.
+		 */
+		public function existeUsuario($usuario, $pass) {
+			$bools = array();
+			$users= $this->BBDD->Consultar("perfil_usuario pu", "*", "JOIN perfiles p ON pu.id_perfil=p.id_perfil JOIN usuarios u ON pu.id_usuario=u.id_usuario", true);
+			
+			foreach ($users as $user) {
+				if ($user["usuario"]===$usuario) {
+					if ($user["passwd"]===$pass){
+						$filtro = $this->BBDD->Consultar("perfil_usuario pu", "*", "JOIN perfiles p ON pu.id_perfil=p.id_perfil JOIN usuarios u ON pu.id_usuario=u.id_usuario WHERE u.usuario='{$user["usuario"]}'", true);
+						if (count($filtro)==2) {
+							return [true,true, true, true];
+						}
+						else if ($user["perfil"]=="admin") {
+							return [true,true, true, false];
+						}
+						else {
+							return [true,true, false, true];
+						}
+					}		
+					else
+						return [true,false];
+				}
+				else {
+					$bools = [false,false];
+				}
+			}
+			return $bools;
+		}
+		
+		/**
+		 * Generador de las categorías de muebleBBB a partir de su BBDD
 		 */
 		public function cargarCategorias() {
 			$this->categorias=array();

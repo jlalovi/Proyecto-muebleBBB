@@ -10,6 +10,13 @@
 	require_once '../html/pie.php';
 	require_once '../html/sesion_carrito.php';
 	
+	// Inicio sesión
+	session_start();
+	// Compruebo que se está accediente a la página con los privilegios adecuados
+	if (!isset($_SESSION["admin"]) || $_SESSION["admin"]==false) {
+		header("location:inicio.php");
+	}
+	
 	//Inicializo la base de datos muebleBBB
 	$BBDD = new MySQLDataBase("mueblebbb");
 	$MuebleBBB = new BBDDMuebleBBB($BBDD);
@@ -52,7 +59,7 @@
 	echo cabecera("MUEBLEBBB - Administración", "../css/estilos.css", "../js/libreriaAdmin.js");
 	echo encabezadoAdmin();
 	echo navAdmin();
-	echo sesion_carritoAdmin();
+	echo sesion_carritoAdmin($_SESSION);
 		echo Html::div_("formularios_producto");
 			contenedorNuevoProducto($max_producto);
 			$MuebleBBB->cargarCatalogo();
